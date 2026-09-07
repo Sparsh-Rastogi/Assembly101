@@ -1,46 +1,14 @@
-include 'emu8086.inc'
+ORG 100H
+MOV DI, 3000H    ; Set base memory address in DI
+MOV AL, 08H      ; Load first given number (8)
+MOV BL, 02H      ; Load second given number (2)
 
-.model small
-.stack 100h
+; Multiplication
+MUL BL           ; AX = AL * BL
+MOV [DI], AX     ; Store 16-bit multiplication result at [DI]
 
-.data
-    ; Reserve two consecutive words (4 bytes) of memory for our answers
-    results dw ?, ? 
-
-.code
-main proc
-    ; 1. Initialize the Data Segment 
-    mov ax, @data
-    mov ds, ax
-
-    ; 2. Setup numbers and Destination Index (DI)
-    mov al, 18h       
-    mov bl, 0ch       
-    lea di, results   ; Point DI to our safe 'results' memory
-
-    ; --- 3. MULTIPLICATION ---
-    mul bl            
-    mov [di], ax      ; Store result in memory
-
-    PRINT 'Multiplication Result (8 * 2): '
-    CALL print_num    ; Prints whatever is in AX
-    PRINTN ''
-
-    ; --- 4. DIVISION ---
-    mov ax, 0018h     ; Reload the first number into AX
-    div bl            
-    mov [di+2], ax    ; Store result in the next consecutive memory location[cite: 1]
-
-    PRINT 'Division Result (8 / 2): '
-    CALL print_num    
-    PRINTN ''
-
-    ; 5. Safely exit
-    mov ah, 4Ch
-    int 21h
-main endp
-
-; Define the magic printing functions at the end of the code segment
-DEFINE_PRINT_NUM
-DEFINE_PRINT_NUM_UNS
-end main
+; Division
+MOV AX, 0008H    ; Reload first number into AX (16-bit dividend)
+DIV BL           ; AL = AX / BL (Quotient), AH = Remainder
+MOV [DI+2], AX   ; Store division result in next consecutive memory location
+RET

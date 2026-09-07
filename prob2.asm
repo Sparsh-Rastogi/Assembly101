@@ -1,45 +1,13 @@
-include 'emu8086.inc'
+ORG 100H
+MOV AX, 00A5H    ; Load first hexadecimal number[cite: 1]
+MOV BX, 0020H    ; Load second hexadecimal number[cite: 1]
 
-.model small
-.stack 100h
+; Addition
+ADD AX, BX       ; AX = AX + BX
+MOV CX, AX       ; Store addition result in CX register[cite: 1]
 
-.data
-    ; No variables needed for this problem
-
-.code
-main proc
-    ; 1. Initialize the Data Segment 
-    mov ax, @data
-    mov ds, ax
-
-    ; 2. Setup Hexadecimal Numbers
-    mov ax, 00A5h   ; First hex number (165 in decimal)
-    mov bx, 0020h   ; Second hex number (32 in decimal)
-
-    ; --- 3. ADDITION ---
-    add ax, bx      
-    mov cx, ax      ; Store addition result in CX register[cite: 1]
-
-    PRINT 'Addition Result (A5h + 20h) in decimal: '
-    CALL print_num  ; AX still holds the result, so we can print directly!
-    PRINTN ''
-
-    ; --- 4. SUBTRACTION ---
-    mov ax, 00A5h   ; Reload original first number
-    sub ax, bx      
-    mov dx, ax      ; Store subtraction result in DX register[cite: 1]
-
-    PRINT 'Subtraction Result (A5h - 20h) in decimal: '
-    mov ax, dx      ; We must move DX into AX so the print function can see it
-    CALL print_num  
-    PRINTN ''
-
-    ; 5. Safely exit
-    mov ah, 4Ch
-    int 21h
-main endp
-
-; Define the magic printing functions
-DEFINE_PRINT_NUM
-DEFINE_PRINT_NUM_UNS
-end main
+; Subtraction
+MOV AX, 00A5H    ; Reload original first number into AX
+SUB AX, BX       ; AX = AX - BX
+MOV DX, AX       ; Store subtraction result in DX register[cite: 1]
+RET
