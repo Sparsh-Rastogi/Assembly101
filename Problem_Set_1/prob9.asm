@@ -1,0 +1,8 @@
+org 100h
+MOV [1000h], 19H
+MOV [1001h], 06H
+MOV DI, 1002h
+MOV AX, 0
+OR AL, [1000h]
+OR AL, [1001h]
+MOV [DI], AX
