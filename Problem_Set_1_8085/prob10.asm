@@ -29,9 +29,9 @@ CPY1:   MOV A, M
 ; Ascending bubble sort at 2000H
         MVI B, 04H        ; 4 outer passes
 
-ASCO:   LXI H, 2000H
+ASCO:   LXI H, 2000H      ; Ascending Outer
         MOV C, B
-ASCI:   MOV A, M
+ASCI:   MOV A, M          ; Ascending Inner
         INX H
         CMP M             ; A vs next element
         JC ASNO           ; A < [HL], no swap needed

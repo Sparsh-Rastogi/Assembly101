@@ -1,0 +1,19 @@
+org 100h
+MOV AX,05H ;Vgs
+MOV DX,05H ;Vds
+MOV CX,01H ;Vth
+CMP CX,AX
+JAE OFF
+JB NOT_OFF    
+NOT_OFF: SUB AX,CX 
+         CMP DX, AX
+         JAE SATURATION
+         MOV BL, 11h
+         JMP EXIT
+OFF: MOV BL, 00h
+     JMP EXIT
+SATURATION: MOV BL,0FFh
+            JMP EXIT 
+
+EXIT: MOV AX, 4CH 
+      INT 21h 
